@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
 import android.util.Log;
+import android.view.MotionEvent;
 
 import org.cocos2d.actions.interval.IntervalAction;
 import org.cocos2d.actions.interval.MoveBy;
 import org.cocos2d.actions.interval.MoveTo;
+import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.actions.interval.Sequence;
 import org.cocos2d.layers.Layer;
 import org.cocos2d.nodes.Director;
@@ -20,6 +22,8 @@ public class clsJuego {
     CCGLSurfaceView _VistaDelJuego;
     CCSize _Pantalla;
     Sprite _Enemigo;
+    Sprite _Lob;
+    Sprite _Bala;
     int _Nivel;
     int _CountEnemigo;
     double _Velocidad;
@@ -59,14 +63,83 @@ public class clsJuego {
         return escenaDevolver;
     }
 
+
+
     class capaJuego extends Layer {
         public capaJuego(){
             Log.d("CapaJuego", "Comienza el constructor");
-
+            ponerImagenFondo();
             Log.d("CapaJuego", "ubicar posiccion inicial del jugador");
+            ponerLob();
 
             super.schedule("ponerJugador", 3.0f);
+            super.schedule("ponerBalas", 1.0f);
+
+            setIsTouchEnabled(true);
         }
+        void ponerImagenFondo(){
+            Sprite ImagenFondo;
+            ImagenFondo=Sprite.sprite("fondo.jpg");
+            ImagenFondo.setPosition(_Pantalla.getWidth()/2 , _Pantalla.getHeight() / 2);
+            float factorAncho, factorAlto;
+            factorAncho = _Pantalla.getWidth() / ImagenFondo.getWidth();
+            factorAlto = _Pantalla.getHeight() / ImagenFondo.getHeight();
+            ImagenFondo.runAction(ScaleBy.action(0.01f,factorAncho,factorAlto));
+
+            super.addChild(ImagenFondo);
+        }
+
+        @Override
+        public boolean ccTouchesMoved(MotionEvent event) {
+            float xtocada, ytocada;
+            xtocada = event.getX();
+            ytocada = _Pantalla.getHeight() - event.getY();
+            Log.d("Comienzo Del Toque", "Comienza toque x en: " + xtocada + " - Y: " + ytocada );
+            movernaveJugador(xtocada,ytocada);
+            return  true;
+        }
+        void   movernaveJugador( float xtocada, float ytocada){
+
+            Log.d("MoverLog" , "Me pidan que lo mueva a X: " + xtocada + "Y tocada: " + ytocada);
+            if (ytocada > _Pantalla.getHeight() / 5) {
+            } else {
+                _Lob.setPosition(xtocada, ytocada);
+            }
+        }
+
+        void ponerLob(){
+            Log.d("spawnLob", "Asignamos enemigo");
+            _Lob=Sprite.sprite("leolog.png");
+
+            _Lob.setPosition(_Pantalla.getWidth() / 2, 0 );
+
+            super.addChild(_Lob);
+        }
+
+        public  void ponerBalas(float diferencaitiempo){
+            _Bala = Sprite.sprite("binker.png");
+
+            CCPoint posicionInicialBala;
+            posicionInicialBala = new CCPoint();
+            posicionInicialBala.x = _Lob.getPositionX();
+            posicionInicialBala.y = _Lob.getHeight()/ 2;
+
+            _Bala.setPosition(posicionInicialBala.x, posicionInicialBala.y);
+
+            CCPoint PosicionFinalBala;
+            PosicionFinalBala = new CCPoint();
+            PosicionFinalBala.x =  _Lob.getPositionX();
+            PosicionFinalBala.y = _Pantalla.getHeight() + 100;
+
+            _Bala.runAction(MoveTo.action(3, PosicionFinalBala.x, PosicionFinalBala.y));
+
+            super.addChild(_Bala, 10);
+
+
+
+        }
+
+
         void ponerJugador(float diferenciaTiempo){
             Random random;
             int enemigo = 0;
@@ -250,7 +323,7 @@ public class clsJuego {
 
 
             Log.d("spawnEnemigo" , "la velocidad es: " + _Velocidad);
-            if (_CountEnemigo == 1){
+            if (_CountEnemigo == 10){
                 _Nivel++;
                 super.unschedule("ponerJugador");
                 super.schedule("ponerJugador",(float)_Velocidad);
