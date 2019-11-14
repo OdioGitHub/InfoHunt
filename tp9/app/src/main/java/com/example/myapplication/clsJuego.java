@@ -171,7 +171,7 @@ public class clsJuego {
                 if (huboColision == true){
                     Log.d("DetectarColisiones", "BOOOMMMMMMMMMMMMMMMMMMM");
                     _EnemigosEliminados.add(punteroenemigo);
-
+                    super.removeChild(_Bala,true);
 
                    // super.removeChild(unEnemigoaVerificar,true);
 
@@ -365,7 +365,7 @@ public class clsJuego {
                     } else {
                         posicionFInal.x = 0 - unEnemigo.getWidth() / 2;
                     }
-                    _Velocidad = 3 - 0.1 * _Nivel;
+                    _Velocidad = 3 - 0.2 * _Nivel;
                     unEnemigo.runAction(MoveTo.action((float) _Velocidad, posicionFInal.x, posicionFInal.y));
                     break;
                 case 1:
@@ -391,16 +391,16 @@ public class clsJuego {
                     Log.d("ponerJugador", "lo agrego a la capa");
                     super.addChild(unEnemigo);
 
-                    _Velocidad = 3 - 0.1 * _Nivel;
+                    _Velocidad = 3 - 0.2 * _Nivel;
                     MoveBy DAr, DArFinal, DAb, DAbFinal, IAr, IArFinal, IAb, IAbFinal;
-                    DAr = MoveBy.action((float) _Velocidad, (int) _Pantalla.getWidth() / 3, (int) getHeight() / 3);
-                    DArFinal = MoveBy.action((float) _Velocidad, (int) _Pantalla.getWidth() / 3 + unEnemigo.getWidth(), (int) getHeight() / 3);
-                    DAb = MoveBy.action((float) _Velocidad, (int) _Pantalla.getWidth() / 3, (int) - (getHeight() / 3));
-                    DAbFinal = MoveBy.action((float) _Velocidad, (int) _Pantalla.getWidth() / 3 + unEnemigo.getWidth(), (int) - (getHeight() / 3));
-                    IAr = MoveBy.action((float) _Velocidad, (int) - (_Pantalla.getWidth()) / 3, (int) getHeight() / 3);
-                    IArFinal = MoveBy.action((float) _Velocidad, (int) - (_Pantalla.getWidth()) / 3 - unEnemigo.getWidth(), (int) getHeight() / 3);
-                    IAb = MoveBy.action((float) _Velocidad, (int) - (_Pantalla.getWidth()) / 3, (int) - getHeight() / 3);
-                    IAbFinal = MoveBy.action((float) _Velocidad, (int) - (_Pantalla.getWidth()) / 3 - unEnemigo.getWidth(), (int) - getHeight() / 3);
+                    DAr = MoveBy.action((float) _Velocidad/3, (int) _Pantalla.getWidth() / 3, (int) getHeight() / 3);
+                    DArFinal = MoveBy.action((float) _Velocidad/3, (int) _Pantalla.getWidth() / 3 + unEnemigo.getWidth(), (int) getHeight() / 3);
+                    DAb = MoveBy.action((float) _Velocidad/3, (int) _Pantalla.getWidth() / 3, (int) - (getHeight() / 3));
+                    DAbFinal = MoveBy.action((float) _Velocidad/3, (int) _Pantalla.getWidth() / 3 + unEnemigo.getWidth(), (int) - (getHeight() / 3));
+                    IAr = MoveBy.action((float) _Velocidad/3, (int) - (_Pantalla.getWidth()) / 3, (int) getHeight() / 3);
+                    IArFinal = MoveBy.action((float) _Velocidad/3, (int) - (_Pantalla.getWidth()) / 3 - unEnemigo.getWidth(), (int) getHeight() / 3);
+                    IAb = MoveBy.action((float) _Velocidad/3, (int) - (_Pantalla.getWidth()) / 3, (int) - getHeight() / 3);
+                    IAbFinal = MoveBy.action((float) _Velocidad/3, (int) - (_Pantalla.getWidth()) / 3 - unEnemigo.getWidth(), (int) - getHeight() / 3);
 
                     IntervalAction zigzag;
 
@@ -461,7 +461,7 @@ public class clsJuego {
                     } else {
                         posicionFInal.x = _Pantalla.getWidth()/3  - unEnemigo.getWidth() / 2;
                     }
-                    _Velocidad = 3 - 0.1 * _Nivel;
+                    _Velocidad = 3 - 0.2 * _Nivel;
                     unEnemigo.runAction(MoveTo.action((float) _Velocidad/2, posicionFInal.x, posicionFInal.y));
                     unEnemigo.runAction(MoveTo.action((float) _Velocidad/2, posicionInicial.x, posicionInicial.y));
                     break;
