@@ -37,6 +37,7 @@ public class clsJuego {
     MediaPlayer _MusicaDefondo;
     int _CountEnemigo;
     double _Velocidad;
+    double _VelocidadBala = 2;
     ArrayList _ListaDeEnemigos;
     ArrayList _ListaDeBalas;
     public clsJuego(CCGLSurfaceView VistaDelJuego) {
@@ -203,7 +204,7 @@ public class clsJuego {
 
              ponerLob();
             ponerPuntaje();
-           super.schedule("ponerBalas", 3.0f);
+           super.schedule("ponerBalas", 2.0f);
             super.schedule("ponerEnemigos", 2.0f);
             super.schedule("detectarColision" , 0.1f);
             super.schedule("sacarenemigos", 2.0f);
@@ -365,7 +366,7 @@ public class clsJuego {
                     IntervalAction zigzag;
 
                     if (a == 0) {
-                        if (_Pantalla.getHeight()<= (_Pantalla.getHeight()/3)*2){
+                        if ( unEnemigo.getPositionY() <= (_Pantalla.getHeight()/3)*2){
                             Log.d("spawnEnemigo", "estoy en la izquierda abajo");
                             zigzag= Sequence.actions(DAr,DAb,DArFinal);
                             unEnemigo.runAction(zigzag);
@@ -376,7 +377,7 @@ public class clsJuego {
                         }
 
                     } else{
-                        if (_Pantalla.getHeight()<= (_Pantalla.getHeight()/3)*2){
+                        if ( unEnemigo.getPositionY() <= (_Pantalla.getHeight()/3)*2){
                             Log.d("spawnEnemigo", "estoy en la derecha abajo");
                             zigzag= Sequence.actions(IAr,IAb,IArFinal);
                             unEnemigo.runAction(zigzag);
@@ -412,9 +413,9 @@ public class clsJuego {
                     Log.d("ponerJugador", "lo agrego a la capa");
                     super.addChild(unEnemigo);
                     MoveTo iriz, irder,voliz,volder;
-                    iriz = MoveTo.action((float) _Velocidad +2, _Pantalla.getWidth()/ 3,posicionInicial.y);
-                    voliz = MoveTo.action((float) _Velocidad +2, -50, posicionInicial.y);
-                    volder = MoveTo.action((float) _Velocidad+2, _Pantalla.getWidth() +500, posicionInicial.y);
+                    iriz = MoveTo.action((float) _Velocidad/2, _Pantalla.getWidth()/ 2,posicionInicial.y);
+                    voliz = MoveTo.action((float) _Velocidad/2, -50, posicionInicial.y);
+                    volder = MoveTo.action((float) _Velocidad/2, _Pantalla.getWidth() +50, posicionInicial.y);
                     IntervalAction binker;
                     if (a == 0){
                        binker = Sequence.actions(iriz,voliz);
@@ -440,9 +441,132 @@ public class clsJuego {
                     break;
                 case 3:
                     unEnemigo =Sprite.sprite("freccero.png");
+
+                    Log.d("ponerJugador", "Cant enemigos es: " + _CountEnemigo);
+                    Log.d("ponerJugador", "x al azar");
+                    azarX = new Random();
+                    a = azarX.nextInt((int) 2);
+                    Log.d("a","sf" + a);
+                    if (a == 0) {
+                        posicionInicial.x = 0;
+                    } else {
+                        posicionInicial.x = _Pantalla.getWidth();
+                    }
+                    Log.d("ponerJugador", "y al azar");
+                    azary = new Random();
+                    b= azary.nextInt((int) (_Pantalla.getHeight() / 3) * 2);
+                    posicionInicial.y = b + (_Pantalla.getHeight()  / 3);
+
+                    Log.d("ponerJugador", "le pongo su ubicacion inicial");
+                    unEnemigo.setPosition(posicionInicial.x,posicionInicial.y);
+
+                    Log.d("ponerJugador", "lo agrego a la capa");
+                    super.addChild(unEnemigo);
+
+                    Random azarx1, azarx2, azarx3, azary1, azary2, azary3, azary4;
+                    int rx1, rx2, rx3, ry1, ry2, ry3,YFinal;
+
+                    azarx1 = new Random();
+                    rx1 = azarx1.nextInt((int) 400);
+
+                    azarx2 = new Random();
+                    rx2 = azarx2.nextInt((int) 400);
+
+                    azarx3 = new Random();
+                    rx3 = azarx3.nextInt((int) 400);
+
+                    azary1 = new Random();
+                    ry1 = azary1.nextInt((int) 400);
+
+                    azary2 = new Random();
+                    ry2 = azary2.nextInt((int) 400);
+
+                    azary3 = new Random();
+                    ry3 = azary3.nextInt((int) 400);
+
+                    azary4 = new Random();
+                    YFinal = azary4.nextInt((int) (_Pantalla.getHeight() / 3) * 2);
+                    YFinal += (_Pantalla.getHeight()  / 3);
+
+                    _Velocidad = 3 - 0.2 * _Nivel;
+                    MoveBy I1ar, I2ar, I3ar, I1ab, I2ab, I3ab, D1ar, D2ar, D3ar, D1ab, D2ab, D3ab;
+                    MoveTo IFinal, DFinal;
+                    I1ar = MoveBy.action((float) _Velocidad/4, (int) rx1,- (int) ry1);
+                    I2ar = MoveBy.action((float) _Velocidad/4, (int) rx2, (int) ry2);
+                    I3ar = MoveBy.action((float) _Velocidad/4, (int) rx3,- (int) ry3);
+                    I1ab = MoveBy.action((float) _Velocidad/4, (int) rx1, (int) ry1);
+                    I2ab = MoveBy.action((float) _Velocidad/4, (int) rx2,- (int) ry2);
+                    I3ab = MoveBy.action((float) _Velocidad/4, (int) rx3, (int) ry3);
+                    IFinal = MoveTo.action((float) _Velocidad/4, (int) _Pantalla.getWidth() + unEnemigo.getWidth()/2, (int) YFinal);
+
+                    D1ar = MoveBy.action((float) _Velocidad/4,- (int) rx1,- (int) ry1);
+                    D2ar = MoveBy.action((float) _Velocidad/4,- (int) rx2, (int) ry2);
+                    D3ar = MoveBy.action((float) _Velocidad/4,- (int) rx3,- (int) ry3);
+                    D1ab = MoveBy.action((float) _Velocidad/4,- (int) rx1, (int) ry1);
+                    D2ab = MoveBy.action((float) _Velocidad/4,- (int) rx2,- (int) ry2);
+                    D3ab = MoveBy.action((float) _Velocidad/4,- (int) rx3, (int) ry3);
+                    DFinal = MoveTo.action((float) _Velocidad/4, 0 - unEnemigo.getWidth()/2, (int) YFinal);
+
+                    IntervalAction SI;
+
+                    if (a == 0) {
+                        if ( unEnemigo.getPositionY() <= (_Pantalla.getHeight()/3)*2){
+                            Log.d("spawnEnemigo", "estoy en la izquierda abajo");
+                            SI = Sequence.actions(I1ar, I2ar, I3ar, IFinal);
+                            unEnemigo.runAction(SI);
+                        }else{
+                            Log.d("spawnEnemigo", "estoy en la izquierda arriba");
+                            SI = Sequence.actions(I1ab, I2ab, I3ab, IFinal);
+                            unEnemigo.runAction(SI);
+                        }
+
+                    } else{
+                        if ( unEnemigo.getPositionY() <= (_Pantalla.getHeight()/3)*2){
+                            Log.d("spawnEnemigo", "estoy en la derecha abajo");
+                            SI = Sequence.actions(D1ar, D2ar, D3ar, DFinal);
+                            unEnemigo.runAction(SI);
+                        }else{
+                            Log.d("spawnEnemigo", "estoy en la derecha arriba");
+                            SI = Sequence.actions(D1ab, D2ab, D3ab, DFinal);
+                            unEnemigo.runAction(SI);
+                        }}
                     break;
                 case 4:
                     unEnemigo =Sprite.sprite("dasman.png");
+
+                    Log.d("PonerEnemigos", "Cant enemigos es: " + _CountEnemigo);
+                    Log.d("PonerEnemigos", "x al azar");
+                    azarX = new Random();
+                    a = azarX.nextInt((int) 2);
+                    Log.d("a", "sf" + a);
+                    if (a == 0) {
+                        posicionInicial.x = 0;
+                    } else {
+                        posicionInicial.x = _Pantalla.getWidth();
+                    }
+                    Log.d("PonerEnemigos", "y al azar");
+
+                    azary = new Random();
+                    b = azary.nextInt((int) (_Pantalla.getHeight() / 3) * 2);
+                    posicionInicial.y = b + (_Pantalla.getHeight() / 3);
+
+                    Log.d("PonerEnemigos", "le pongo su ubicacion inicial");
+                    unEnemigo.setPosition(posicionInicial.x, posicionInicial.y);
+
+                    Log.d("PonerEnemigos", "lo agrego a la capa");
+                    super.addChild(unEnemigo);
+
+
+                    azaryFInal = new Random();
+                    bfinal = azaryFInal.nextInt((int) (_Pantalla.getHeight() / 3) * 2);
+                    posicionFInal.y = bfinal + (_Pantalla.getHeight() / 3);
+                    if (posicionInicial.x == 0) {
+                        posicionFInal.x = _Pantalla.getWidth() + unEnemigo.getWidth() / 2;
+                    } else {
+                        posicionFInal.x = 0 - 200;
+                    }
+                    _Velocidad = 3 - 0.2 * _Nivel;
+                    unEnemigo.runAction(MoveTo.action((float) _Velocidad, posicionFInal.x, posicionFInal.y));
                     break;
             }
             _CountEnemigo++;
@@ -454,8 +578,8 @@ public class clsJuego {
             Log.d("PonerEnemigos" , "la velocidad es: " + _Velocidad);
 
             Log.d("spawnEnemigo" , "la velocidad es: " + _Velocidad);
-            if (_CountEnemigo == 15){
-                if (_CountEnemigosMuertos < 7){
+            if (_CountEnemigo == 5){
+                if (_CountEnemigosMuertos < 1){
                     Log.d("Perdida" , "PERDIO");
 
                     super.unschedule("ponerBalas");
@@ -475,8 +599,11 @@ public class clsJuego {
                 }else {
 
                     _Nivel++;
+                    _VelocidadBala = 2 - _Nivel * 0.2;
                     _Puntaje.setString("PUNTAJE: " + 0 + "/7 NIVEL: " + _Nivel);
                     _CountEnemigosMuertos = 0;
+                    super.unschedule("ponerBalas");
+                    super.schedule("ponerBalas", (float) _Velocidad);
                     super.unschedule("PonerEnemigos");
                     super.schedule("PonerEnemigos", (float) _Velocidad);
                     _CountEnemigo = 0;
@@ -687,7 +814,9 @@ public class clsJuego {
             PosicionFinalBala.x =  _Lob.getPositionX();
             PosicionFinalBala.y = _Pantalla.getHeight() + 100;
 
-            unaBala.runAction(MoveTo.action(2, PosicionFinalBala.x, PosicionFinalBala.y));
+
+            Log.d("ponerBalas" , "velocidad bala: " + _VelocidadBala );
+            unaBala.runAction(MoveTo.action((float)_VelocidadBala, PosicionFinalBala.x, PosicionFinalBala.y));
 
             super.addChild(unaBala, 10);
             _Bala = unaBala;
