@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.media.MediaPlayer;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MotionEvent;
 
 import org.cocos2d.actions.interval.IntervalAction;
@@ -11,6 +10,7 @@ import org.cocos2d.actions.interval.MoveTo;
 import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.actions.interval.Sequence;
 import org.cocos2d.layers.Layer;
+import org.cocos2d.menus.Menu;
 import org.cocos2d.menus.MenuItemImage;
 import org.cocos2d.nodes.Director;
 import org.cocos2d.nodes.Label;
@@ -32,6 +32,7 @@ public class clsJuego {
     Sprite _Bala;
     int _Nivel;
     Label _Puntaje;
+    Label _Resultado;
     int _CountEnemigosMuertos = 0;
     MediaPlayer _MusicaDefondo;
     int _CountEnemigo;
@@ -157,24 +158,24 @@ public class clsJuego {
     class capaJuego extends Layer {
         public capaJuego(){
             //ponerMusicaFondo();
-            //ponerBoton();
+            ponerBoton();
             _ListaDeEnemigos = new ArrayList();
             _ListaDeBalas = new ArrayList();
             Log.d("CapaJuego", "Comienza el constructor");
-           ponerImagenFondo();
+           //ponerImagenFondo();
             Log.d("CapaJuego", "ubicar posiccion inicial del jugador");
-            ponerLob();
-            ponerPuntaje();
+          //  ponerLob();
+            //ponerPuntaje();
 
 
           //  super.schedule("ponerJugador", 3.0f);
 
 
-           super.schedule("ponerBalas", 3.0f);
+          /* super.schedule("ponerBalas", 3.0f);
             super.schedule("ponerEnemigos", 2.0f);
             super.schedule("detectarColision" , 0.1f);
             super.schedule("sacarenemigos", 2.0f);
-            setIsTouchEnabled(true);
+            setIsTouchEnabled(true);*/
 
         }
 
@@ -187,12 +188,26 @@ public class clsJuego {
             posicionx = _Pantalla.getWidth()/2;
             posiciony = _Pantalla.getHeight()/2;
             botonDisparo.setPosition(posicionx,posiciony);
-            super.addChild(botonDisparo);
+
+            org.cocos2d.menus.Menu menuDeBotones;
+            menuDeBotones = Menu.menu(botonDisparo);
+            menuDeBotones.setPosition(0,0);
+
+
+            super.addChild(menuDeBotones);
 
         }
         public  void presionado(){
             Log.d("PonerBotones", "El boton fue tocado");
-            ponerLob();
+            ponerImagenFondo();
+
+             ponerLob();
+            ponerPuntaje();
+           super.schedule("ponerBalas", 3.0f);
+            super.schedule("ponerEnemigos", 2.0f);
+            super.schedule("detectarColision" , 0.1f);
+            super.schedule("sacarenemigos", 2.0f);
+            setIsTouchEnabled(true);
         }
 
 
@@ -439,14 +454,92 @@ public class clsJuego {
             Log.d("PonerEnemigos" , "la velocidad es: " + _Velocidad);
 
             Log.d("spawnEnemigo" , "la velocidad es: " + _Velocidad);
-            if (_CountEnemigo == 15){
-                _Nivel++;
-                _Puntaje.setString("PUNTAJE: " +  0  +"/7 NIVEL: " + _Nivel);
-                _CountEnemigosMuertos = 0;
-                super.unschedule("PonerEnemigos");
-                super.schedule("PonerEnemigos",(float)_Velocidad);
-                _CountEnemigo = 0;
+            if (_CountEnemigo == 2){
+                if (_CountEnemigosMuertos < 7){
+                    Log.d("Perdida" , "PERDIO");
+
+                    super.unschedule("ponerBalas");
+                    super.unschedule("ponerEnemigos");
+                    super.unschedule("detectarColision");
+                    super.unschedule("sacarenemigos");
+                    super.removeChild(_Lob, true);
+                    super.removeChild(_Puntaje, true);
+                    ponerImagenFondoperdio();
+                    ponerPuntajePerdio();
+                    //BORRAR SPRITES BALA Y ENEMIGOS
+                    ponerBotonVolveraJugar();
+
+
+
+
+                }else {
+
+                    _Nivel++;
+                    _Puntaje.setString("PUNTAJE: " + 0 + "/7 NIVEL: " + _Nivel);
+                    _CountEnemigosMuertos = 0;
+                    super.unschedule("PonerEnemigos");
+                    super.schedule("PonerEnemigos", (float) _Velocidad);
+                    _CountEnemigo = 0;
+                }
             }
+
+        }
+        void ponerBotonVolveraJugar(){
+            Log.d("PonerBotones", "Voy a crear el boton para disparar");
+            MenuItemImage botonDisparo;
+            botonDisparo = MenuItemImage.item("comienzo.png", "comienzo.png", this, "presionadoBotonVolver");
+
+            float posicionx, posiciony;
+            posicionx = _Pantalla.getWidth()/2;
+            posiciony = _Pantalla.getHeight()/3;
+            botonDisparo.setPosition(posicionx,posiciony);
+
+            org.cocos2d.menus.Menu menuDeBotones;
+            menuDeBotones = Menu.menu(botonDisparo);
+            menuDeBotones.setPosition(0,0);
+
+
+            super.addChild(menuDeBotones);
+
+        }
+        public  void presionadoBotonVolver(){
+            Log.d("PonerBotones", "El boton fue tocado");
+
+
+            super.removeChild(_Resultado, true);
+            _Nivel = 1;
+            _CountEnemigosMuertos = 0;
+            _CountEnemigo = 0;
+            _ListaDeBalas.clear();
+            _ListaDeEnemigos.clear();
+            //ponerMusicaFondo();
+
+            ponerImagenFondo();
+
+            ponerLob();
+            ponerPuntaje();
+            super.schedule("ponerBalas", 3.0f);
+            super.schedule("ponerEnemigos", 2.0f);
+            super.schedule("detectarColision" , 0.1f);
+            super.schedule("sacarenemigos", 2.0f);
+            setIsTouchEnabled(true);
+        }
+
+
+
+        void  ponerPuntajePerdio(){
+            Log.d("PonerPuntajePerdio", "Creo el label con el puntaje");
+            _Resultado = Label.label("LLEGASTE AL NIVEL: " + _Nivel, "Verdana", 50);
+            Log.d("PonerPuntaje", "Lo ubico arriba centrado");
+            _Resultado.setPosition(_Pantalla.getWidth()/2 , _Pantalla.getHeight()/2 - _Resultado.getHeight() / 2);
+
+            Log.d("PonerPuntajePerdio", "Le pongo un color Bonito");
+            CCColor3B colorTitulo;
+            colorTitulo = new CCColor3B(255,255,255);
+            _Resultado.setColor(colorTitulo);
+
+            Log.d("PonerPuntajePerdio", "Leo agrego a la capa");
+            super.addChild(_Resultado, +15);
 
         }
         public void detectarColision (float deltaTiempo){
@@ -530,6 +623,18 @@ public class clsJuego {
         void ponerImagenFondo(){
             Sprite ImagenFondo;
             ImagenFondo=Sprite.sprite("fondo.jpg");
+            ImagenFondo.setPosition(_Pantalla.getWidth()/2 , _Pantalla.getHeight() / 2);
+            float factorAncho, factorAlto;
+            factorAncho = _Pantalla.getWidth() / ImagenFondo.getWidth();
+            factorAlto = _Pantalla.getHeight() / ImagenFondo.getHeight();
+            ImagenFondo.runAction(ScaleBy.action(0.01f,factorAncho,factorAlto));
+
+            super.addChild(ImagenFondo);
+        }
+
+        void ponerImagenFondoperdio(){
+            Sprite ImagenFondo;
+            ImagenFondo=Sprite.sprite("fondoperdio.jpg");
             ImagenFondo.setPosition(_Pantalla.getWidth()/2 , _Pantalla.getHeight() / 2);
             float factorAncho, factorAlto;
             factorAncho = _Pantalla.getWidth() / ImagenFondo.getWidth();
