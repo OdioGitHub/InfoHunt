@@ -454,7 +454,7 @@ public class clsJuego {
             Log.d("PonerEnemigos" , "la velocidad es: " + _Velocidad);
 
             Log.d("spawnEnemigo" , "la velocidad es: " + _Velocidad);
-            if (_CountEnemigo == 2){
+            if (_CountEnemigo == 15){
                 if (_CountEnemigosMuertos < 7){
                     Log.d("Perdida" , "PERDIO");
 
@@ -673,12 +673,12 @@ public class clsJuego {
 
         public  void ponerBalas(float diferencaitiempo){
             Sprite unaBala;
-            unaBala = Sprite.sprite("binker.png");
+            unaBala = Sprite.sprite("bala.png");
 
             CCPoint posicionInicialBala;
             posicionInicialBala = new CCPoint();
             posicionInicialBala.x = _Lob.getPositionX();
-            posicionInicialBala.y = _Lob.getHeight()/ 2;
+            posicionInicialBala.y = _Lob.getPositionY() + _Lob.getHeight()/2 + unaBala.getHeight()/2;
 
             unaBala.setPosition(posicionInicialBala.x, posicionInicialBala.y);
 
