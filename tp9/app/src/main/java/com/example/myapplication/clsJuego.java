@@ -204,7 +204,7 @@ public class clsJuego {
 
              ponerLob();
             ponerPuntaje();
-           super.schedule("ponerBalas", 2.0f);
+           super.schedule("ponerBalas", (float) _VelocidadBala);
             super.schedule("ponerEnemigos", 2.0f);
             super.schedule("detectarColision" , 0.1f);
             super.schedule("sacarenemigos", 2.0f);
@@ -578,8 +578,8 @@ public class clsJuego {
             Log.d("PonerEnemigos" , "la velocidad es: " + _Velocidad);
 
             Log.d("spawnEnemigo" , "la velocidad es: " + _Velocidad);
-            if (_CountEnemigo == 5){
-                if (_CountEnemigosMuertos < 1){
+            if (_CountEnemigo > 14){
+                if (_CountEnemigosMuertos < 7){
                     Log.d("Perdida" , "PERDIO");
 
                     super.unschedule("ponerBalas");
@@ -599,11 +599,11 @@ public class clsJuego {
                 }else {
 
                     _Nivel++;
-                    _VelocidadBala = 2 - _Nivel * 0.2;
+                    _VelocidadBala = 2 - _Nivel * 0.1;
                     _Puntaje.setString("PUNTAJE: " + 0 + "/7 NIVEL: " + _Nivel);
                     _CountEnemigosMuertos = 0;
                     super.unschedule("ponerBalas");
-                    super.schedule("ponerBalas", (float) _Velocidad);
+                    super.schedule("ponerBalas", (float) _VelocidadBala);
                     super.unschedule("PonerEnemigos");
                     super.schedule("PonerEnemigos", (float) _Velocidad);
                     _CountEnemigo = 0;
@@ -816,7 +816,7 @@ public class clsJuego {
 
 
             Log.d("ponerBalas" , "velocidad bala: " + _VelocidadBala );
-            unaBala.runAction(MoveTo.action((float)_VelocidadBala, PosicionFinalBala.x, PosicionFinalBala.y));
+            unaBala.runAction(MoveTo.action((float)(_VelocidadBala - 0.1), PosicionFinalBala.x, PosicionFinalBala.y));
 
             super.addChild(unaBala, 10);
             _Bala = unaBala;
