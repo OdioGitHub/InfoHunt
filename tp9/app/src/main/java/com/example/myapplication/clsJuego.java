@@ -235,9 +235,9 @@ public class clsJuego {
 
         void  ponerPuntaje(){
             Log.d("PonerPuntaje", "Creo el label con el puntaje");
-            _Puntaje = Label.label("PUNTAJE: " +  _CountEnemigosMuertos  +"/7 NIVEL: " + _Nivel, "Verdana", 60);
+            _Puntaje = Label.label("PUNTAJE: " +  _CountEnemigosMuertos  +"/7 NIVEL: " + _Nivel, "Verdana", 80);
             Log.d("PonerPuntaje", "Lo ubico arriba centrado");
-            _Puntaje.setPosition(300, _Pantalla.getHeight() - _Puntaje.getHeight() / 2);
+            _Puntaje.setPosition(_Pantalla.getWidth()/2, _Pantalla.getHeight() - _Puntaje.getHeight() / 2);
 
             Log.d("PonerPuntaje", "Le pongo un color Bonito");
             CCColor3B colorTitulo;
