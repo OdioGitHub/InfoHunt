@@ -158,7 +158,7 @@ public class clsJuego {
 
     class capaJuego extends Layer {
         public capaJuego(){
-            //ponerMusicaFondo();
+
             ponerBoton();
             _ListaDeEnemigos = new ArrayList();
             _ListaDeBalas = new ArrayList();
@@ -201,10 +201,10 @@ public class clsJuego {
         public  void presionado(){
             Log.d("PonerBotones", "El boton fue tocado");
             ponerImagenFondo();
-
-             ponerLob();
+            ponerMusicaFondo();
+            ponerLob();
             ponerPuntaje();
-           super.schedule("ponerBalas", (float) _VelocidadBala);
+            super.schedule("ponerBalas", (float) _VelocidadBala);
             super.schedule("ponerEnemigos", 2.0f);
             super.schedule("detectarColision" , 0.1f);
             super.schedule("sacarenemigos", 2.0f);
@@ -590,6 +590,7 @@ public class clsJuego {
                     super.removeChild(_Puntaje, true);
                     ponerImagenFondoperdio();
                     ponerPuntajePerdio();
+                    _MusicaDefondo.stop();
                     //BORRAR SPRITES BALA Y ENEMIGOS
                     ponerBotonVolveraJugar();
 
@@ -639,7 +640,7 @@ public class clsJuego {
             _CountEnemigo = 0;
             _ListaDeBalas.clear();
             _ListaDeEnemigos.clear();
-            //ponerMusicaFondo();
+            ponerMusicaFondo();
 
             ponerImagenFondo();
 
